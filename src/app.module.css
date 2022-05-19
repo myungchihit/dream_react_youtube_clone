@@ -1,3 +1,22 @@
 .app {
   max-width: 80rem;
 }
+
+.content{
+  display: flex;
+}
+
+.detail{
+  flex: 1 1 70%;
+}
+
+.list{
+  flex: 1 1 30%;
+}
+
+/* 780 이하일때 동영상 아래로 목록이 내려가게끔 설정*/
+@media screen and (max-width: 48rem) {
+    .content{
+      flex-direction: column;
+    }
+}

@@ -11,31 +11,52 @@
  * dependency를 주입(injection) --> dependency injection이라고 부름.
  */
 
+/**
+ * Axios 라이브러리
+ * 
+ */
+
 // 네트워크 처리 서비스
 class Youtube{
-    constructor(key){
-        this.key = key;
-        this.getRequestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
+    constructor(httpClient){
+        this.youtube = httpClient;
     }
 
     // 인기 동영상
     async mostPopular(){
         // 유튜브 데이터 받아오기 , postman에서 확인하면서
-        const response = await fetch(`https://www.googleapis.com/youtube/v3/videos/?part=snippet&chart=mostPopular&maxResults=25&key=${this.key}`,
-            this.getRequestOptions);
-        const result = await response.json();
-        return result.items;
+        // const response = await fetch(`https://www.googleapis.com/youtube/v3/videos/?part=snippet&chart=mostPopular&maxResults=25&key=${this.key}`,
+        //     this.getRequestOptions);
+        // const result = await response.json();
+        // return result.items;
+
+        const response = await this.youtube.get('videos', {
+            params: {
+                part: 'snippet',
+                chart: 'mostPopular',
+                maxResults: 25
+            }
+        });
+
+        return response.data.items;
     }
 
     // 검색
     async search(query){
-        const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${query}&type=video&key=AIzaSyBibmaM7KTcv56ArgrQPsy4jDUblIOBkeM`,
-            this.getRequestOptions);
-        const result = await response.json();
-        return result.items.map(item => ({ ...item, id: item.id.videoId }));  // 검색하는 기존의 id구조와 달라서 id만 다시 수정해서 바꿔줌
+        // const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${query}&type=video&key=AIzaSyBibmaM7KTcv56ArgrQPsy4jDUblIOBkeM`,
+        //     this.getRequestOptions);
+        // const result = await response.json();
+        //return result.items.map(item => ({ ...item, id: item.id.videoId }));  // 검색하는 기존의 id구조와 달라서 id만 다시 수정해서 바꿔줌
+
+        const response = await this.youtube.get('search', {
+            params: {
+              part: 'snippet',
+              maxResults: 25,
+              type: 'video',
+              q: query,
+            },
+          });
+        return response.data.items.map(item => ({ ...item, id: item.id.videoId }));
     }
 
 }

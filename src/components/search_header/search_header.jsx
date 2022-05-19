@@ -1,7 +1,8 @@
 import styles from './search_header.module.css'
-import React, { useRef } from 'react';
+import React, { memo, useRef } from 'react';
 
-const SearchHeader = ({onSearch}) => { // prop으로 서치 콜백을 받아온다.
+const SearchHeader = memo(
+    ({onSearch}) => { // prop으로 서치 콜백을 받아온다.
 
         const inputRef = useRef();  // input에서 값을 받아옴
 
@@ -36,6 +37,7 @@ const SearchHeader = ({onSearch}) => { // prop으로 서치 콜백을 받아온�
                 </button>
             </header>
         );
-};
+    }
+);
 
 export default SearchHeader;
